@@ -46,54 +46,49 @@ except Exception as e:
 
 st.markdown("### 📝 أدخل بيانات المريض")
 
-# Create two columns for better layout
-col1, col2 = st.columns(2)
+# Create three columns for more compact layout
+col1, col2, col3 = st.columns(3)
 
 with col1:
     st.markdown("#### الحالات الطبية")
     HighBP = st.selectbox("🩸 ضغط دم مرتفع", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
-    HighChol = st.selectbox("🧬 كوليسترول مرتفع", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
-    CholCheck = st.selectbox("✓ فحص الكوليسترول (آخر 5 سنوات)", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
     Smoker = st.selectbox("🚬 مدخن", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
-    Stroke = st.selectbox("🧠 جلطة دماغية سابقة", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
+    Stroke = st.selectbox("🧠 جلطة دماغية", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
     Diabetes = st.selectbox("🩺 سكري", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
-    
-with col2:
-    st.markdown("#### نمط الحياة")
-    PhysActivity = st.selectbox("🏃 نشاط بدني منتظم", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
-    Fruits = st.selectbox("🍎 تناول فواكه منتظم", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
-    Veggies = st.selectbox("🥬 تناول خضروات منتظم", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
-    HvyAlcoholConsump = st.selectbox("🍷 كحول ثقيل", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
-    AnyHealthcare = st.selectbox("🏥 تأمين صحي", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
-    NoDocbcCost = st.selectbox("💰 تجنب الطبيب بسبب التكلفة", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
 
-# Another row for measurements
-st.markdown("#### القياسات والمؤشرات الصحية")
-col3, col4 = st.columns(2)
+with col2:
+    st.markdown("#### الفحوصات والتأمين")
+    HighChol = st.selectbox("🧬 كوليسترول مرتفع", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
+    CholCheck = st.selectbox("✓ فحص كوليسترول", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
+    AnyHealthcare = st.selectbox("🏥 تأمين صحي", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
+    NoDocbcCost = st.selectbox("💰 تجنب الطبيب", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
 
 with col3:
-    BMI = st.number_input("⚖️ مؤشر كتلة الجسم (BMI)", min_value=10.0, max_value=50.0, value=25.0, step=0.1)
-    GenHlth = st.select_slider("📊 الحالة الصحية العامة", options=[1, 2, 3, 4, 5], value=3, 
-                               format_func=lambda x: {1: "ممتازة", 2: "جيدة جداً", 3: "جيدة", 4: "عادلة", 5: "سيئة"}[x])
-    MentHlth = st.slider("🧠 أيام الصحة النفسية السيئة (آخر 30 يوم)", min_value=0, max_value=30, value=0)
+    st.markdown("#### نمط الحياة")
+    PhysActivity = st.selectbox("🏃 نشاط بدني", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
+    Fruits = st.selectbox("🍎 فواكه", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
+    Veggies = st.selectbox("🥬 خضروات", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
+    HvyAlcoholConsump = st.selectbox("🍷 كحول ثقيل", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
+
+# Health measurements in columns
+st.markdown("#### المقاييس الصحية والديموغرافية")
+col4, col5, col6, col7 = st.columns(4)
 
 with col4:
-    DiffWalk = st.selectbox("🚶 صعوبة في المشي أو الصعود", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
-    PhysHlth = st.slider("💪 أيام الصحة البدنية السيئة (آخر 30 يوم)", min_value=0, max_value=30, value=0)
-
-# Demographics
-st.markdown("#### معلومات ديموغرافية")
-col5, col6, col7 = st.columns(3)
+    BMI = st.number_input("⚖️ BMI", min_value=10.0, max_value=50.0, value=25.0, step=0.1)
+    GenHlth = st.select_slider("📊 الحالة الصحية", options=[1, 2, 3, 4, 5], value=3)
 
 with col5:
-    Age = st.slider("👤 العمر", min_value=18, max_value=80, value=40)
+    MentHlth = st.slider("🧠 أيام سيئة (نفسي)", min_value=0, max_value=30, value=0)
+    PhysHlth = st.slider("💪 أيام سيئة (بدني)", min_value=0, max_value=30, value=0)
 
 with col6:
-    Sex = st.selectbox("⚤ الجنس", [0, 1], format_func=lambda x: "ذكر" if x == 1 else "أنثى")
+    DiffWalk = st.selectbox("🚶 صعوبة مشي", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
+    Age = st.slider("👤 العمر", min_value=18, max_value=80, value=40)
 
 with col7:
-    Education = st.select_slider("🎓 مستوى التعليم", options=[1, 2, 3, 4, 5, 6], value=3,
-                                format_func=lambda x: {1: "لم أكمل", 2: "ثانوي", 3: "دبلوم", 4: "بكالوريوس", 5: "ماجستير", 6: "دكتوراه"}[x])
+    Sex = st.selectbox("⚤ الجنس", [0, 1], format_func=lambda x: "ذكر" if x == 1 else "أنثى")
+    Education = st.select_slider("🎓 التعليم", options=[1, 2, 3, 4, 5, 6], value=3)
 
 # Income with better range
 st.markdown("#### الدخل السنوي (بآلاف الدولارات)")
