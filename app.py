@@ -27,18 +27,12 @@ if not model_exists:
 try:
     model = joblib.load("svm_model.pkl")
     
-    # Try to load metadata if available
-    if os.path.exists("model_metadata.pkl"):
-        with open('model_metadata.pkl', 'rb') as f:
-            metadata = pickle.load(f)
-        expected_features = metadata.get('feature_names', [])
-        n_features = metadata.get('n_features', 0)
-    else:
-        expected_features = ['HighBP', 'HighChol', 'CholCheck', 'BMI', 'Smoker', 'Stroke', 
-                           'Diabetes', 'PhysActivity', 'Fruits', 'Veggies', 'HvyAlcoholConsump', 
-                           'AnyHealthcare', 'NoDocbcCost', 'GenHlth', 'MentHlth', 'PhysHlth', 
-                           'DiffWalk', 'Sex', 'Age', 'Education', 'Income']
-        n_features = 21
+    # Define expected features
+    expected_features = ['HighBP', 'HighChol', 'CholCheck', 'BMI', 'Smoker', 'Stroke', 
+                       'Diabetes', 'PhysActivity', 'Fruits', 'Veggies', 'HvyAlcoholConsump', 
+                       'AnyHealthcare', 'NoDocbcCost', 'GenHlth', 'MentHlth', 'PhysHlth', 
+                       'DiffWalk', 'Sex', 'Age', 'Education', 'Income']
+    n_features = 21
         
 except Exception as e:
     st.error(f"Error loading model: {str(e)}")
@@ -84,32 +78,38 @@ with col5:
 
 with col6:
     DiffWalk = st.selectbox("🚶 صعوبة مشي", [0, 1], format_func=lambda x: "نعم" if x == 1 else "لا")
-    Age = st.slider("👤 العمر", min_value=18, max_value=80, value=40)
+    st.markdown("---")
+    st.markdown("""
+    **فئات التعليم:**
+    - **1** = لم يحضر المدرسة أو روضة فقط
+    - **2** = الصفوف 1-8 (الابتدائي)
+    - **3** = الصفوف 9-11 (الإعدادي)
+    - **4** = صف 12 أو معادلة (ثانوي)
+    - **5** = كلية 1-3 سنوات (دبلوم)
+    - **6** = كلية 4+ سنوات (بكالوريوس وأعلى)
+    """)
 
 with col7:
+    Age = st.slider("👤 العمر", min_value=18, max_value=80, value=40)
     Sex = st.selectbox("⚤ الجنس", [0, 1], format_func=lambda x: "ذكر" if x == 1 else "أنثى")
-    Education = st.select_slider("🎓 التعليم", options=[1, 2, 3, 4, 5, 6], value=3)
 
-# Income with better range
-st.markdown("#### الدخل السنوي (بآلاف الدولارات)")
-Income = st.slider("💵 الدخل السنوي", min_value=0, max_value=150, value=50, step=5,
-                   help="0-25K, 25-35K, 35-50K, 50-75K, 75-100K, 100-150K, 150K+")
+# Income with proper categorization (1-8)
+st.markdown("#### 🎓 التعليم (التعليم)")
+Education = st.select_slider("🎓 اختر مستوى التعليم (1-6)", options=[1, 2, 3, 4, 5, 6], value=3)
 
-# Convert income to category (1-8 scale based on ranges)
-if Income < 25:
-    income_cat = 1
-elif Income < 35:
-    income_cat = 2
-elif Income < 50:
-    income_cat = 3
-elif Income < 75:
-    income_cat = 4
-elif Income < 100:
-    income_cat = 5
-elif Income < 150:
-    income_cat = 6
-else:
-    income_cat = 7
+st.markdown("#### 💵 الدخل السنوي (الدخل السنوي)")
+st.markdown("""
+**فئات الدخل:**
+- **1** = أقل من 15,000$
+- **2** = 15,000 - 25,000$
+- **3** = 25,000 - 35,000$
+- **4** = 35,000 - 50,000$
+- **5** = 50,000 - 75,000$
+- **6** = 75,000 - 100,000$
+- **7** = 100,000 - 150,000$
+- **8** = أكثر من 150,000$
+""")
+income_cat = st.slider("💵 اختر فئة الدخل (1-8)", min_value=1, max_value=8, value=4)
 
 st.divider()
 
